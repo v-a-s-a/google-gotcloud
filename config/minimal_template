@@ -1,0 +1,34 @@
+# Gridengine software to be configured by Ansible
+[setup/ansible-gridengine]
+provider=ansible
+frontend_groups=gridengine_master
+compute_groups=gridengine_clients
+
+# Create a cloud provider (call it "google-cloud")
+[cloud/google-cloud]
+provider=google
+gce_project_id=****REPLACE WITH YOUR PROJECT ID****
+gce_client_id=****REPLACE WITH YOUR CLIENT ID****
+gce_client_secret=*****REPLACE WITH YOUR SECRET KEY*****
+
+# Create a login (call it "google-login")
+[login/google-login]
+image_user=*****REPLACE WITH YOUR GOOGLE USERID (just the userid, not email)*****
+image_user_sudo=root
+image_sudo=True
+user_key_name=elasticluster
+user_key_private=~/.ssh/google_compute_engine
+user_key_public=~/.ssh/google_compute_engine.pub
+
+# Bring all of the elements together to define a cluster called "gridengine"
+[cluster/gridengine]
+cloud=google-cloud
+login=google-login
+setup_provider=ansible-gridengine
+security_group=default
+image_id=*****REPLACE WITH OUTPUT FROM: gcloud compute images list | grep ^debian | cut -f 1 -d " " *****
+flavor=n1-standard-1
+frontend_nodes=1
+compute_nodes=2
+image_userdata=
+ssh_to=frontend
