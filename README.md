@@ -5,6 +5,6 @@ This is a repo for development notes. Follow them on the [wiki](https://github.c
 
 Things to look at:  
 * Current NFS setup
-* Alternative storage options (Persistent Disks, Google Cloud Storage)
-* Launching more powerful worker nodes
+* Alternative storage options (RAID Persistent Disks, Google Cloud Storage)
+* Launching separate machine types for gateway and worker nodes
 
