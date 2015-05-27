@@ -8,10 +8,10 @@
 # # nfsoptions:  options to use when mounting the filesystem. If not
 # #              defined, `rw,sync` will be used.
 ---
-hosts: gridengine_clients
-tasks:
-- name: ping test
-  ping:
+- hosts: gridengine_clients
+  tasks:
+    - name: ping test
+      ping:
 
 #  - shell: if [ -z "$nfsoptions" ]; then  echo rw,sync,nfsvers=3; else echo $nfsoptions; fi
 #    register: _nfsopts
