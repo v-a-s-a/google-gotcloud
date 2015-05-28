@@ -1,18 +1,26 @@
 # Playbook that mounts an NFS drive on compute nodes of an Elasticluster
-#
-## From the Elasticluster docs...
-# Variables you need to define:
-# # nfsserver:   the nfs server to mount from
-# # nfspath:     the remote filesystem to mount from the nfs server
-# # nfsmount:    the directory where you want to mount the filesystem.
-# # nfsoptions:  options to use when mounting the filesystem. If not
-# #              defined, `rw,sync` will be used.
 ---
-- hosts: gridengine_clients
-  tasks:
-    - name: ping test
-      ping:
 
+## create folder on gateway
+## export it via NFS
+## restart the NFS service
+- hosts: gridengine_master
+  tasks:
+    - name: create data mount point
+      sudo: yes
+      file: path=/mnt/data/ state=directory owner=nobody group=nogroup
+    - name: export data mount via NFS
+      sudo: yes
+      nfsexport: path=/mnt/data dest=/etc/exports options=rw,no_root_squash,sync
+      notify:
+        - restart NFS
+
+  handlers:
+    - name: restart NFS
+      sudo: yes
+      service: name=nfs-kernel-server state=restarted
+
+#-hosts: gridengine_clients
 #  - shell: if [ -z "$nfsoptions" ]; then  echo rw,sync,nfsvers=3; else echo $nfsoptions; fi
 #    register: _nfsopts
 #    sudo: false
