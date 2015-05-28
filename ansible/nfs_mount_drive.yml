@@ -8,7 +8,7 @@
   tasks:
     - name: create data mount point
       sudo: yes
-      file: path=/mnt/data/ state=directory owner=nobody group=nogroup
+      file: path=/mnt/data/ state=directory mode=777 owner=nobody group=nogroup
     - name: export data mount via NFS
       sudo: yes
       nfsexport: path=/mnt/data dest=/etc/exports options=rw,no_root_squash,sync
@@ -20,15 +20,12 @@
       sudo: yes
       service: name=nfs-kernel-server state=restarted
 
-#-hosts: gridengine_clients
-#  - shell: if [ -z "$nfsoptions" ]; then  echo rw,sync,nfsvers=3; else echo $nfsoptions; fi
-#    register: _nfsopts
-#    sudo: false
-#    connection: local
-#    tags:
-#      - nfs
-#
-#  - name: configure /etc/fstab on clients
-#    action: mount name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts={{_nfsopts.stdout}} state=mounted
-#    tags:
-#      - nfs
+## create a folder on client
+- hosts: gridengine_clients
+  tasks:
+    - name: create data mount point
+      sudo: yes
+      file: path=/mnt/data/ state=directory
+    - name: mount the exported data directory 
+      sudo: yes
+      action: mount name=/mnt/data src=frontend001:/mnt/data fstype=nfs opts=rw,sync,nfsvers=3 state=mounted
