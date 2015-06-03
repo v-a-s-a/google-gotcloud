@@ -1,0 +1,40 @@
+## installing gcsfuse on a debian-based headnode
+---
+- hosts: gridengine_master
+  vars:
+    go_url: https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
+    go_version: 1.4.2
+    os: linux
+    architecture: amd64
+    user: "{{ lookup('env','USER') }}"
+  tasks:
+    - name: download go binary tarball
+      sudo: yes
+      get_url: url={{go_url}} dest=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
+    - name: extract go binaries
+      sudo: yes
+      unarchive: dest=/usr/local
+                 src=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
+                 copy=no
+    - name: create profile.d directory
+      sudo: yes
+      file: path=/etc/profile.d state=directory mode=0775
+    ## this isn't working
+    - name: Add the Go bin directory to the PATH environment variable for all users
+      sudo: yes
+      copy: src=../files/go-bin.sh dest=/etc/profile.d
+    - name: Set GOPATH for all users
+      sudo: yes
+      copy: src=../files/go-path.sh dest=/etc/profile.d 
+    - name: get FUSE
+      sudo: yes
+      apt: name=fuse update_cache=yes
+    - name: add user to FUSE group
+      sudo: yes
+      user: name={{user}} group=fuse
+    - name: set FUSE permissions
+      sudo: yes
+      file: mode=0777 group=fuse path=/dev/fuse
+    ## this isn't working
+    - name: install gcsfuse
+      shell: go get -u github.com/googlecloudplatform/gcsfuse

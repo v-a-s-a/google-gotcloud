@@ -1,0 +1,31 @@
+# Playbook that mounts an NFS drive on compute nodes of an Elasticluster
+---
+
+## create folder on gateway
+## export it via NFS
+## restart the NFS service
+- hosts: slurm_master
+  tasks:
+    - name: create data mount point
+      sudo: yes
+      file: path=/mnt/data/ state=directory mode=777 owner=nobody group=nogroup
+    - name: export data mount via NFS
+      sudo: yes
+      nfsexport: path=/mnt/data dest=/etc/exports options=rw,no_root_squash,sync
+      notify:
+        - restart NFS
+
+  handlers:
+    - name: restart NFS
+      sudo: yes
+      service: name=nfs-kernel-server state=restarted
+
+## create a folder on client
+- hosts: slurm_clients
+  tasks:
+    - name: create data mount point
+      sudo: yes
+      file: path=/mnt/data/ state=directory
+    - name: mount the exported data directory 
+      sudo: yes
+      action: mount name=/mnt/data src=frontend001:/mnt/data fstype=nfs opts=rw,sync,nfsvers=3 state=mounted
