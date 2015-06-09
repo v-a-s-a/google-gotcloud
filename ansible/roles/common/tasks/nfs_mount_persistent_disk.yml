@@ -4,7 +4,7 @@
   vars:
     mount_point: /mnt/data/
     persistent_disk: data-thousand-genomes
-    zone: us-central1-a
+    zone: us-central1-b
   tasks:
     - name: find gateway IP address
       local_action: shell grep frontend /Users/vasya/.elasticluster/storage/ansible-inventory.gotcloud | cut -d " " -f 2 | cut -f 2 -d "=" 
@@ -13,7 +13,7 @@
       local_action: shell gcloud compute instances list | grep {{ gateway_ip.stdout }} - | cut -d " " -f 1
       register: gateway_image
     - name: attach persistent disk
-      local_action: command gcloud compute instances attach-disk {{ gateway_image.stdout }} --disk={{ persistent_disk }}
+      local_action: command gcloud compute instances attach-disk {{ gateway_image.stdout }} --disk={{ persistent_disk }} --zone={{ zone }}
     - name: create data mount point
       sudo: yes
       file: path={{ mount_point }} state=directory mode=755 owner=nobody group=nogroup
@@ -43,4 +43,4 @@
       file: path={{ mount_point }} state=directory
     - name: mount the exported data directory 
       sudo: yes
-      action: mount name={{ mount_point }} src=frontend001:/mnt/data fstype=nfs opts=rw,async,nfsvers=3 state=mounted
+      action: mount name={{ mount_point }} src=frontend001:{{ mount_point }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted

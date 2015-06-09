@@ -1,6 +1,6 @@
 ## installing gcsfuse on a debian-based headnode
 ---
-- hosts: gridengine_master
+- hosts: slurm_master
   vars:
     go_url: https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
     go_version: 1.4.2
@@ -16,16 +16,12 @@
       unarchive: dest=/usr/local
                  src=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
                  copy=no
-    - name: create profile.d directory
-      sudo: yes
-      file: path=/etc/profile.d state=directory mode=0775
-    ## this isn't working
     - name: Add the Go bin directory to the PATH environment variable for all users
       sudo: yes
-      copy: src=../files/go-bin.sh dest=/etc/profile.d
+      copy: src=go-bin.sh dest=/etc/profile.d
     - name: Set GOPATH for all users
       sudo: yes
-      copy: src=../files/go-path.sh dest=/etc/profile.d 
+      copy: src=go-path.sh dest=/etc/profile.d 
     - name: get FUSE
       sudo: yes
       apt: name=fuse update_cache=yes
