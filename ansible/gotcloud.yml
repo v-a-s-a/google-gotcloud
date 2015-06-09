@@ -1,0 +1,4 @@
+---
+## this file defines all infrastructure for gotcloud on Google Compute Engine
+- include: gateway_node.yml
+- include: compute_nodes.yml
