@@ -1,0 +1,6 @@
+---
+# Compute nodes in our cluster
+- hosts: slurm_clients
+  roles:
+    - common
+    - compute

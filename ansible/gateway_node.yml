@@ -1,0 +1,7 @@
+---
+# Gateway to our cluster
+# This will run our scheduler and NFS
+- hosts: slurm_master
+  roles:
+    - common
+    - gateway
