@@ -1,0 +1,5 @@
+---
+# handlers for all things NFS
+- name: restart NFS
+  sudo: yes
+  service: name=nfs-kernel-server state=restarted

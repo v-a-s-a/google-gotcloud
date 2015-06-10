@@ -1,0 +1,24 @@
+---
+## mount persistent disk across cluster
+- name: find gateway IP address
+  local_action: shell grep frontend /Users/vasya/.elasticluster/storage/ansible-inventory.gotcloud | cut -d " " -f 2 | cut -f 2 -d "="
+  register: gateway_ip
+- name: find gateway image
+  local_action: shell gcloud compute instances list | grep {{ gateway_ip.stdout }} - | cut -d " " -f 1
+  register: gateway_image
+- name: attach persistent disk
+  local_action: command gcloud compute instances attach-disk {{ gateway_image.stdout }} --disk={{ persistent_disk }} --zone={{ zone }}
+- name: create data mount point
+  sudo: yes
+  file: path={{ mount_point }} state=directory mode=755 owner=nobody group=nogroup
+- name: format and mount Persistent Disk
+  sudo: yes
+  shell: /usr/share/google/safe_format_and_mount -m "mkfs.ext4 -F" /dev/sdc {{ mount_point }}
+- name: make sure permissions are set
+  sudo: yes
+  shell: chown -R trubetsk:trubetsk {{ mount_point }}
+- name: export data mount via NFS
+  sudo: yes
+  nfsexport: path={{ mount_point }} dest=/etc/exports options=rw,no_root_squash,async
+  notify:
+    - restart NFS

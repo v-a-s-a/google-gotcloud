@@ -1,0 +1,3 @@
+---
+# mount a persistent disk across the cluster
+- include: mount_persistent_disk.yml 
