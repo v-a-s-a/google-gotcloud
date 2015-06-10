@@ -1,0 +1,6 @@
+---
+# mount a GCS bucket as a drive
+- name: create mount point
+  sudo: yes
+  file: path={{ mount_point }} state=directory mode=755 owner=nobody group=nogroup
+- 
