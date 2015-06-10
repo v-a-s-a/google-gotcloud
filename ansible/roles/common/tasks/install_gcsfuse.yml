@@ -1,36 +1,36 @@
 ## installing gcsfuse on a debian-based headnode
 ---
-- hosts: slurm_master
-  vars:
-    go_url: https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
-    go_version: 1.4.2
-    os: linux
-    architecture: amd64
-    user: "{{ lookup('env','USER') }}"
-  tasks:
-    - name: download go binary tarball
-      sudo: yes
-      get_url: url={{go_url}} dest=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
-    - name: extract go binaries
-      sudo: yes
-      unarchive: dest=/usr/local
-                 src=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
-                 copy=no
-    - name: Add the Go bin directory to the PATH environment variable for all users
-      sudo: yes
-      copy: src=go-bin.sh dest=/etc/profile.d
-    - name: Set GOPATH for all users
-      sudo: yes
-      copy: src=go-path.sh dest=/etc/profile.d 
-    - name: get FUSE
-      sudo: yes
-      apt: name=fuse update_cache=yes
-    - name: add user to FUSE group
-      sudo: yes
-      user: name={{user}} group=fuse
-    - name: set FUSE permissions
-      sudo: yes
-      file: mode=0777 group=fuse path=/dev/fuse
-    ## this isn't working
-    - name: install gcsfuse
-      shell: go get -u github.com/googlecloudplatform/gcsfuse
+- name: download go binary tarball
+  sudo: yes
+  get_url: url={{go_url}} dest=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
+- name: extract go binaries
+  sudo: yes
+  unarchive: dest=/usr/local
+             src=/tmp/go{{go_version}}.{{os}}-{{architecture}}.tar.gz
+             copy=no
+- name: add go binary to PATH
+  sudo: yes
+  lineinfile:
+    dest=/etc/bash.bashrc
+    line="PATH=$PATH:/usr/local/go/bin"
+- name: add GOPATH variable to environment
+  sudo: yes
+  lineinfile:
+    dest=/etc/bash.bashrc
+    line="GOPATH=$HOME/go"
+- name: add binaries made by go to PATH
+  sudo: yes
+  lineinfile:
+    dest=/etc/bash.bashrc
+    line="PATH=$GOPATH/bin:$PATH"
+- name: get FUSE
+  sudo: yes
+  apt: name=fuse update_cache=yes
+- name: add user to FUSE group
+  sudo: yes
+  user: name={{user}} group=fuse
+- name: set FUSE permissions
+  sudo: yes
+  file: mode=0777 group=fuse path=/dev/fuse
+- name: install gcsfuse
+  script: go_get_gcsfuse.sh 
