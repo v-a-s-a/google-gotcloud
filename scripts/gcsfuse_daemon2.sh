@@ -35,6 +35,7 @@ stop_service() {
   echo -n " * Stopping $NAME... "
   start-stop-daemon -Kq -R 10 -p $PIDFILE
   e=$?
+  umount $MOUNT_POINT
   if [ $e -eq 1 ]; then
     echo "not running"
     return
