@@ -16,7 +16,7 @@ fi
 
 start_service() {
   echo -n " * Starting $NAME... "
-  start-stop-daemon --chuid vasya --background -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
+  start-stop-daemon --chuid trubetsk --background -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
   e=$?
   if [ $e -eq 1 ]; then
     echo "already running"
