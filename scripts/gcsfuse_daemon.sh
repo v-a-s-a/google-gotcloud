@@ -1,7 +1,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Mounting a GCS bucket though a FUSE"
 NAME=gcsfuse
-DAEMON=/home/trubetsk/go/bin/$NAME
+DAEMON=/home/vasya/go/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 BUCKET="gs-fuse-test"
@@ -16,7 +16,7 @@ fi
 
 start_service() {
   echo -n " * Starting $NAME... "
-  start-stop-daemon --chuid trubetsk --background -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
+  start-stop-daemon --chuid vasya --background -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
   e=$?
   if [ $e -eq 1 ]; then
     echo "already running"
