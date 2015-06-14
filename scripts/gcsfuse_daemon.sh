@@ -6,7 +6,11 @@ PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 BUCKET="gs-fuse-test"
 MOUNT_POINT="/mnt/data/"
-DAEMON_OPTS=" -limit-ops-per-sec -1 -o ro $BUCKET $MOUNT_POINT"
+DAEMON_OPTS=" -limit-ops-per-sec -1 \
+              -o ro \
+              -stat-cache-ttl 1.0h \
+              -type-cache-ttl 1.0h \
+              $BUCKET $MOUNT_POINT"
 
 
 if [ ! -x $DAEMON ]; then
