@@ -12,6 +12,7 @@ DAEMON_OPTS=" -limit-ops-per-sec -1 \
               -type-cache-ttl 1.0h \
               -temp-dir /mnt/output/ \
               -temp-dir-bytes 200000000000 \
+              -gcs-chunk-size 0 \
               $BUCKET $MOUNT_POINT"
 
 
