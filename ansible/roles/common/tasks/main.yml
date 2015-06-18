@@ -1,3 +1,3 @@
 ---
-#- include: install_gcsfuse.yml tags=gcsfuse
-- include: mount_gcs_bucket.yml tags=gcsfuse
+- include: install_gcsfuse.yml tags=gcsfuse,install
+- include: mount_gcs_backend.yml tags=gcsfuse

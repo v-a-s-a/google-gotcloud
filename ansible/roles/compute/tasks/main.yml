@@ -1,3 +1,3 @@
 ---
 # compute node plays
-- include: mount_persistent_disk.yml 
+- include: mount_persistent_disk.yml tags=nfs 

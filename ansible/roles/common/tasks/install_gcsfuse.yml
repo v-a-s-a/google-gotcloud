@@ -1,4 +1,4 @@
-## installing gcsfuse on a debian-based headnode
+## installing gcsfuse on a debian-based instance
 ---
 - name: download go binary tarball
   sudo: yes
@@ -32,5 +32,6 @@
 - name: set FUSE permissions
   sudo: yes
   file: mode=1660 owner=root group=fuse path=/dev/fuse
+
 - name: install gcsfuse
   script: go_get_gcsfuse.sh 

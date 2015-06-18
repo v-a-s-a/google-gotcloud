@@ -2,18 +2,13 @@
 # mount a GCS bucket as a drive
 - name: Add user to FUSE group for permissions.
   sudo: yes
-  user: name={{user}} group=fuse
+  user: name={{ user }} group=fuse append=yes
 - name: Create mount point for data.
   sudo: yes
   file: path={{ mount_point }} state=directory mode=0777 owner=nobody group=nogroup
-- name: Get gcsfuse daemon script.
-  git: repo=https://github.com/vtrubets/google-gotcloud.git dest=/home/{{ user }}/google-gotcloud/
 - name: Move gcsfuse daemon script into /etc/init.d/.
   sudo: yes
-  command: mv /home/{{ user }}/google-gotcloud/scripts/gcsfuse_daemon.sh /etc/init.d/gcsfuse
-- name: Change gcsfuse daemons permissions.
-  sudo: yes 
-  file: path=/etc/init.d/gcsfuse mode=0777
+  template: src=gcsfuse_daemon.sh.j2 dest=/etc/init.d/gcsfuse mode=0777 owner=trubetsk group=fuse 
 - name: Start gcsfuse service.
   sudo: yes
   service: name=gcsfuse state=restarted 

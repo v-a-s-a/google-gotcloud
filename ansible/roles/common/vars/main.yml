@@ -1,15 +1,17 @@
 ---
-## installing gcsufse
+## installing golang and gcsufse
 go_url: https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
 go_version: 1.4.2
 os: linux
 architecture: amd64
 user: trubetsk 
-go_bin: "\\/usr\\/local\\/go\\/bin"
-go_path: "GOPATH=\\$HOME\\/go"
-go_lib: "\\$GOPATH\\/bin"
 
 ## mounting a persistent disk across a cluster
-mount_point: /mnt/data/
-persistent_disk: data-thousand-genomes
+mount_point: /mnt/output/
+persistent_disk: gcsfuse-data
 zone: us-central1-b
+
+## mounting a GCS bucket across a cluster
+fuse_mount_point: /mnt/data/
+bucket_name: gs-fuse-test
+bucket_type: private
