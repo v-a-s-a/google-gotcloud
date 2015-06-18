@@ -32,6 +32,6 @@
 - name: set FUSE permissions
   sudo: yes
   file: mode=1660 owner=root group=fuse path=/dev/fuse
-
 - name: install gcsfuse
+  sudo: yes
   script: go_get_gcsfuse.sh 
