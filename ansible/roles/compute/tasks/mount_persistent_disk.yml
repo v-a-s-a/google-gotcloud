@@ -1,8 +1,14 @@
 ---
 # mounting a persistent disk on compute nodes
-- name: create data mount point
+- name: create input mount point
   sudo: yes
-  file: path={{ mount_point }} state=directory
-- name: mount the exported data directory
+  file: path={{ input_mount }} state=directory
+- name: create output mount point
   sudo: yes
-  action: mount name={{ mount_point }} src=frontend001:{{ mount_point }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted
+  file: path={{ output_mount }} state=directory
+- name: mount the exported input directory
+  sudo: yes
+  action: mount name={{ input_mount }} src=frontend001:{{ input_mount }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted
+- name: mount the exported output directory
+  sudo: yes
+  action: mount name={{ output_mount }} src=frontend001:{{ output_mount }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted

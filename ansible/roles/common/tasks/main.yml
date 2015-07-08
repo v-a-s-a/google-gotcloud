@@ -1,3 +1,6 @@
 ---
-- include: install_gcsfuse.yml tags=gcsfuse,install
+## commented out because gcsfuse is now included in the base image.
+#- include: install_gcsfuse.yml tags=gcsfuse,install
 - include: mount_gcs_backend.yml tags=gcsfuse
+- include: mount_local_ssd.yml tags=local-ssd
+- include: mount_read-only_persistent_disk.yml tags=read-only 

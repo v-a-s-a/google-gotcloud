@@ -1,4 +1,2 @@
-mount_point: /mnt/output/
-persistent_disk: gcsfuse-data
-zone: us-central1-b
-device_id: /dev/sdb
+input_mount: /mnt/inputs/
+output_mount: /mnt/outputs/

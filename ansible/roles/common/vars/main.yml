@@ -7,11 +7,10 @@ architecture: amd64
 user: trubetsk 
 
 ## mounting a persistent disk across a cluster
-mount_point: /mnt/output/
-persistent_disk: gcsfuse-data
+mount_point: /mnt/data/
+persistent_disk: bams-24-1000g 
 zone: us-central1-b
 
 ## mounting a GCS bucket across a cluster
 fuse_mount_point: /mnt/data/
-bucket_name: gs-fuse-test
-bucket_type: private
+bucket_name: chr20-1000g 
