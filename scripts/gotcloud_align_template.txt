@@ -1,0 +1,7 @@
+#!/bin/bash
+
+/home/vasya/gotcloud/gotcloud align \
+	--conf  /home/trubetsk/google-gotcloud/config/multi_sample_alignment.conf \
+	--numjobs 2 \
+	--list \
+	--outdir

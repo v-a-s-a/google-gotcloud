@@ -19,6 +19,7 @@ for i in xrange(12):
 	outDir = '/mnt/outputs/align_out_%s/' % str(i)
 	os.system('mkdir %s' % outDir)
 	fastqs = list(pairwise(fastqList))[i]
+	print >> open('%sfastq.list' % outDir, 'w'), 'MERGE_NAME	FASTQ1	FASTQ2'
 	for file in fastqs:
 		print >> open('%sfastq.list' % outDir, 'a'), file
 	
