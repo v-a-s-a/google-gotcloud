@@ -1,0 +1,25 @@
+---
+## Mounting a Persistent Disk across a cluster as read only.
+- name: get host instance name.
+  local_action: shell gcloud compute instances list | grep {{ ansible_eth0.ipv4.address }} - | cut -d " " -f 1
+  register: instance_name
+- name: Attach persistent disk as read-only.
+  local_action:
+    module: gce_pd
+    pem_file: /Users/vasya/Projects/boehnkelab/google-gotcloud/auth/gotGoogleCloud-7882344317db.pem
+    project_id: friendly-medley-91616
+    service_account_email: 1008716305589-i8l6q0q8d8egnmbklpnbqll1vikgppb3@developer.gserviceaccount.com
+    mode: READ_ONLY
+    instance_name: "{{ instance_name.stdout }}"
+    name: output-1000g-chr20
+    state: present
+- name: Create read-only data mount point.
+  sudo: yes
+  file: path=/mnt/inputs/ state=directory mode=0444 owner=nobody group=nogroup
+- name: Check if device is mounted.
+  shell: mount -l | grep output-1000g-chr20 | awk '{print $5}'
+  register: mounted
+- name: format and mount Persistent Disk
+  sudo: yes
+  shell: /usr/share/google/safe_format_and_mount -m "mkfs.ext4 -F" /dev/disk/by-id/google-output-1000g-chr20/ /mnt/inputs/
+  when: mounted.stdout != "ext4"

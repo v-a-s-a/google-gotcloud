@@ -6,7 +6,7 @@
 - name: find gateway image
   local_action: shell gcloud compute instances list | grep {{ gateway_ip.stdout }} - | cut -d " " -f 1
   register: gateway_image
-- name: attach persistent disk
+- name: attach persistent disk of inputs
   local_action:
     module: gce_pd
     pem_file: /Users/vasya/Projects/boehnkelab/google-gotcloud/auth/gotGoogleCloud-7882344317db.pem
@@ -14,23 +14,51 @@
     service_account_email: 1008716305589-i8l6q0q8d8egnmbklpnbqll1vikgppb3@developer.gserviceaccount.com
     mode: READ_WRITE
     instance_name: "{{ gateway_image.stdout }}"
-    name: gcsfuse-data
+    name: "{{ input_disk }}"
     state: present
-- name: create data mount point
+- name: attach persistent disk of outputs
+  local_action:
+    module: gce_pd
+    pem_file: /Users/vasya/Projects/boehnkelab/google-gotcloud/auth/gotGoogleCloud-7882344317db.pem
+    project_id: friendly-medley-91616
+    service_account_email: 1008716305589-i8l6q0q8d8egnmbklpnbqll1vikgppb3@developer.gserviceaccount.com
+    mode: READ_WRITE
+    instance_name: "{{ gateway_image.stdout }}"
+    name: "{{ output_disk }}"
+    state: present
+- name: create input data mount point
   sudo: yes
-  file: path={{ mount_point }} state=directory mode=755 owner=nobody group=nogroup
-- name: Check if device is mounted.
-  shell: mount -l | grep {{ device_id }} | awk '{print $5}' 
-  register: mounted
-- name: format and mount Persistent Disk
+  file: path={{ input_mount }} state=directory mode=755 owner=nobody group=nogroup
+- name: create input data mount point
   sudo: yes
-  shell: /usr/share/google/safe_format_and_mount -m "mkfs.ext4 -F" {{ device_id }} {{ mount_point }}
-  when: mounted.stdout != "ext4"
-- name: make sure permissions are set
+  file: path={{ output_mount }} state=directory mode=755 owner=nobody group=nogroup
+- name: Check if input device is mounted.
+  shell: mount -l | grep {{ input_device }} | awk '{print $5}' 
+  register: input_is_mounted
+- name: Check if output device is mounted.
+  shell: mount -l | grep {{ output_device }} | awk '{print $5}' 
+  register: output_is_mounted
+- name: format and mount inputs Persistent Disk
   sudo: yes
-  shell: chown -R trubetsk:trubetsk {{ mount_point }}
-- name: export data mount via NFS
+  shell: /usr/share/google/safe_format_and_mount -m "mkfs.ext4 -F" {{ input_device }} {{ input_mount }}
+  when: input_is_mounted.stdout != "ext4"
+- name: format and mount outputs Persistent Disk
   sudo: yes
-  nfsexport: path={{ mount_point }} dest=/etc/exports options=rw,no_root_squash,async
+  shell: /usr/share/google/safe_format_and_mount -m "mkfs.ext4 -F" {{ output_device }} {{ output_mount }}
+  when: output_is_mounted.stdout != "ext4"
+- name: make sure permissions for inputs mount are set
+  sudo: yes
+  shell: chown -R trubetsk:trubetsk {{ input_mount }}
+- name: make sure permissions for outputs mount are set
+  sudo: yes
+  shell: chown -R trubetsk:trubetsk {{ output_mount }}
+- name: export input mount via NFS
+  sudo: yes
+  nfsexport: path={{ input_mount }} dest=/etc/exports options=rw,no_root_squash,async
+  notify:
+    - restart NFS
+- name: export output mount via NFS
+  sudo: yes
+  nfsexport: path={{ output_mount }} dest=/etc/exports options=rw,no_root_squash,async
   notify:
     - restart NFS
