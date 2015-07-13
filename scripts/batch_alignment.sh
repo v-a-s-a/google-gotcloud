@@ -15,5 +15,5 @@ for i in {0..11}; do
 		sed 's|list|'"${fastqlist}"'|' - > ${batchscript}
 
 	## submit that sucka
-	sbatch -B 4 ${batchscript}
+	sbatch -B 8 ${batchscript}
 done
