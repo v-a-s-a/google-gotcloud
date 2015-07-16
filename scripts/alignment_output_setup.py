@@ -13,7 +13,7 @@ for (root, dirs, files) in os.walk('/mnt/inputs/bam2fastq_output/fastqs/mnt/data
         fastqs = [ root+fastq for fastq in files if fastq.endswith('1.fastq') ]
         for fastq in fastqs:
                 sample = os.path.basename(fastq).split('.')[0]
-                fastqList.append('\t'.join((sample, fastq, fastq.replace('_1', '_2'))))
+                fastqList.append('\t'.join((sample, fastq, fastq.replace('_1.', '_2.'))))
 
 for i in xrange(12):
 	outDir = '/mnt/outputs/align_out_%s/' % str(i)
