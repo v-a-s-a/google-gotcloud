@@ -3,12 +3,6 @@
 - name: create input mount point
   sudo: yes
   file: path={{ input_mount }} state=directory
-- name: create output mount point
-  sudo: yes
-  file: path={{ output_mount }} state=directory
 - name: mount the exported input directory
   sudo: yes
   action: mount name={{ input_mount }} src=frontend001:{{ input_mount }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted
-- name: mount the exported output directory
-  sudo: yes
-  action: mount name={{ output_mount }} src=frontend001:{{ output_mount }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted

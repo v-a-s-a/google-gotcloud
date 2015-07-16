@@ -1,0 +1,8 @@
+---
+## mounting an output persistent disk on compute nodes
+- name: create output mount point
+  sudo: yes
+  file: path={{ output_mount }} state=directory
+- name: mount the exported output directory
+  sudo: yes
+  action: mount name={{ output_mount }} src=frontend001:{{ output_mount }} fstype=nfs opts=rw,async,nfsvers=3 state=mounted
