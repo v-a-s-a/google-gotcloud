@@ -1,4 +1,4 @@
 ---
 # mount a persistent disk across the cluster
-- include: mount_input_persistent_disk.yml tags=nfs,input 
 - include: mount_output_persistent_disk.yml tags=nfs,output
+- include: mount_input_persistent_disk.yml tags=nfs,input 

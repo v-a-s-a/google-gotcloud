@@ -1,0 +1,16 @@
+File sizes of 4 FASTQ input files referenced in '/mnt/outputs/align_out_6/fastq.list' = 53.24 GB
+Total temp space will be about 207.65 GB
+Total space for BAM files will be about 95.84 GB
+Be sure you have enough space to hold all this data
+/mnt/outputs/align_out_6/Makefiles/align.conf already exists, so not dumping configuration
+WARNING: RGID was not specified, so defaulting to the first 4 fields (':' delimited) of the first FASTQ1 sequence identifier.
+WARNING: LIBRARY was not specified, so defaulting to the value of SAMPLE.
+WARNING: CENTER was not specified, so defaulting to 'unknown'.
+WARNING: PLATFORM was not specified, so defaulting to 'ILLUMINA'.
+Created /mnt/outputs/align_out_6/Makefiles/align_HG01500.Makefile
+Created /mnt/outputs/align_out_6/Makefiles/align_NA19625.Makefile
+---------------------------------------------------------------------
+Waiting while samples are processed...
+Running make -f /mnt/outputs/align_out_6/Makefiles/alignAll.Makefile -j 2 > /mnt/outputs/align_out_6/Makefiles/alignAll.Makefile.log 2> /mnt/outputs/align_out_6/Makefiles/alignAll.Makefile.err...
+
+Processing finished in 33180 secs with no errors reported
