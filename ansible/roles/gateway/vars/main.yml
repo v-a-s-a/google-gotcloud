@@ -1,7 +1,7 @@
-input_mount: /mnt/inputs/
-output_mount: /mnt/outputs/
+input_mount: /mnt/inputs
+output_mount: /mnt/outputs
 input_disk:  fastqs-24-1000g
-output_disk: chr20-1000g-output 
+output_disk: snpcall-output 
 zone: us-central1-b
-output_device: /dev/sdc
+output_device: /dev/disk/by-id/scsi-0Google_PersistentDisk_snpcall-output
 input_device: /dev/sdd

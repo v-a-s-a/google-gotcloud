@@ -3,9 +3,9 @@
 - name: Add user to FUSE group for permissions.
   sudo: yes
   user: name={{ user }} group=fuse append=yes
-- name: Create mount point for data.
-  sudo: yes
-  file: path={{ mount_point }} state=directory mode=0777 owner=nobody group=nogroup
+#- name: Create mount point for data.
+#  sudo: yes
+#  file: path={{ mount_point }} state=directory mode=0777 owner=nobody group=nogroup
 - name: Move gcsfuse daemon script into /etc/init.d/.
   sudo: yes
   template: src=gcsfuse_daemon.sh.j2 dest=/etc/init.d/gcsfuse mode=0777 owner=trubetsk group=fuse 

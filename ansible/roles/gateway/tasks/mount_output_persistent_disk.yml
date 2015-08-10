@@ -30,7 +30,7 @@
   sudo: yes
   file: path={{ output_mount }} state=directory mode=755 owner=nobody group=nogroup
 - name: Check if output device is mounted.
-  shell: mount -l | grep {{ output_device }} | awk '{print $5}'
+  shell: mount -l | grep {{ output_mount }} | awk '{print $5}'
   register: output_is_mounted
 - name: format and mount outputs Persistent Disk
   sudo: yes
