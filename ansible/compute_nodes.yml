@@ -4,3 +4,4 @@
   roles:
     - common
     - compute
+    - { role: stackdriver, tags: ["monitoring"] }

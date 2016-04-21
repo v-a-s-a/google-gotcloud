@@ -5,3 +5,4 @@
   roles:
     - common
     - gateway
+    - { role: stackdriver, tags: ["monitoring"] }
