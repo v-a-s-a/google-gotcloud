@@ -1,0 +1,3 @@
+[submodule "ansible/roles/stackdriver"]
+	path = ansible/roles/stackdriver
+	url = git@github.com:GoogleCloudPlatform/stackdriver-ansible-role.git
